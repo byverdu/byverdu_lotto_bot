@@ -1,0 +1,29 @@
+{
+  "name": "byverdu_lotto_bot",
+  "version": "1.0.0",
+  "description": "Telegram bot to send Euromillions results",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "DEBUG=node-telegram-bot-api nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byverdu/byverdu_lotto_bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/byverdu/byverdu_lotto_bot/issues"
+  },
+  "homepage": "https://github.com/byverdu/byverdu_lotto_bot#readme",
+  "dependencies": {
+    "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
+    "node-telegram-bot-api": "^0.51.0",
+    "nodemon": "^2.0.6",
+    "puppeteer": "^5.5.0"
+  }
+}
