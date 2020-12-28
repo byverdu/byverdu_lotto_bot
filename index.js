@@ -1,3 +1,5 @@
+const { getChatId } = require('./utils');
+
 const TelegramBot = require('node-telegram-bot-api');
 const debug = require('debug')('node-telegram-bot-api');
 const dotenv = require('dotenv');
@@ -7,23 +9,32 @@ dotenv.config();
 
 debug('booting', name);
 
-const token = process.env.TELEGRAM_TOKEN;
+const { TELEGRAM_TOKEN, TELEGRAM_GROUP_CHAT_ID } = process.env;
 
-debug('set telegram Token =>', token !== undefined ? '👍 TOKEN PROVIDED 👍' : ' 👎 NO TOKEN PROVIDED 👎');
+debug('set telegram Token =>', TELEGRAM_TOKEN !== undefined ? '👍 TOKEN PROVIDED 👍' : ' 👎 NO TOKEN PROVIDED 👎');
 
-if (!token) {
+if (!TELEGRAM_TOKEN) {
   process.exit(1)
 }
 
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token);
+const bot = new TelegramBot(TELEGRAM_TOKEN);
 
-async function getChatId() {
-  return await bot.getUpdates()
-}
+(async () => {
+  try {
+    const botUpdate = await getChatId(TELEGRAM_TOKEN)
 
-const { chat: { id } = { id: process.env.TELEGRAM_CHAT_ID } } = getChatId()
+    if (!Array.isArray(botUpdate)) {
+      throw new Error('result from getChatId is not an Array')
+    }
 
-debug('getUpdates Resp', JSON.stringify(getChatId()))
+    // Check if the groupId could have changed
+    const groupId = botUpdate.length === 0 ?
+      TELEGRAM_GROUP_CHAT_ID :
+      botUpdate.find(items => items.chat.type === 'group').chat.id;
 
-// bot.sendMessage(id, 'hello there').then(resp => debug('sendMsg Resp', resp))
+
+    // bot.sendMessage(groupId, 'Marlita I love U').then(resp => debug('sendMsg Resp', resp))
+  } catch (e) {
+    throw new Error(e)
+  }
+})()
