@@ -2,8 +2,10 @@
   "include": ["./**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "module": "commonjs",
     "checkJs": true,
     "downlevelIteration": true,
-    "lib": ["es2015"]
+    "lib": ["es2015"],
+    "target": "esnext"
   }
 }
