@@ -1,16 +1,15 @@
-const { getChatId } = require('./utils');
+require('dotenv').config()
 
 const TelegramBot = require('node-telegram-bot-api');
 const debug = require('debug')('node-telegram-bot-api');
-const dotenv = require('dotenv');
-const name = 'byverdu_lotto_bot';
 
-dotenv.config();
+const { getChatId } = require('./utils');
+const { scrapper } = require('./lib')
+
+const name = 'byverdu_lotto_bot';
+const { TELEGRAM_TOKEN, TELEGRAM_GROUP_CHAT_ID, LUCKY_NUMBERS, HEADLESS_CHROME } = process.env;
 
 debug('booting', name);
-
-const { TELEGRAM_TOKEN, TELEGRAM_GROUP_CHAT_ID } = process.env;
-
 debug('set telegram Token =>', TELEGRAM_TOKEN !== undefined ? '👍 TOKEN PROVIDED 👍' : ' 👎 NO TOKEN PROVIDED 👎');
 
 if (!TELEGRAM_TOKEN) {
@@ -18,23 +17,32 @@ if (!TELEGRAM_TOKEN) {
 }
 
 const bot = new TelegramBot(TELEGRAM_TOKEN);
+const luckyNumbers = LUCKY_NUMBERS.split(',');
 
-(async () => {
-  try {
-    const botUpdate = await getChatId(TELEGRAM_TOKEN)
+scrapper({ debug, headless: JSON.parse(HEADLESS_CHROME), luckyNumbers })
+  .then(() => {
+    (async () => {
+      try {
+        const botUpdate = await getChatId(TELEGRAM_TOKEN)
 
-    if (!Array.isArray(botUpdate)) {
-      throw new Error('result from getChatId is not an Array')
-    }
+        if (!Array.isArray(botUpdate)) {
+          throw new Error('result from getChatId is not an Array')
+        }
 
-    // Check if the groupId could have changed
-    const groupId = botUpdate.length === 0 ?
-      TELEGRAM_GROUP_CHAT_ID :
-      botUpdate.find(items => items.chat.type === 'group').chat.id;
+        // Check if the groupId could have changed
+        debug('Getting Chat Id')
 
+        const groupId = botUpdate.length === 0 ?
+          TELEGRAM_GROUP_CHAT_ID :
+          botUpdate.find(items => items.chat.type === 'group').chat.id;
 
-    // bot.sendMessage(groupId, 'Marlita I love U').then(resp => debug('sendMsg Resp', resp))
-  } catch (e) {
-    throw new Error(e)
-  }
-})()
+        debug('Sending Picture')
+        bot.sendPhoto(groupId, './lotto_results.png').then(resp => {
+          debug('Picture sent', resp)
+          process.exit(0)
+        })
+      } catch (e) {
+        throw new Error(e)
+      }
+    })()
+  });
