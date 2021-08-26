@@ -2,6 +2,8 @@
 
 # set cronjobs crontab -e
 
+# see Readme for more details
+
 # For details see man 4 crontabs
 
 # Example of job definition:
