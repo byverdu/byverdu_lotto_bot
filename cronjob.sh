@@ -3,6 +3,8 @@
 # set cronjobs crontab -e
 # on mac M1 had to add PATH before the cronjob
 
+# see Readme for more details
+
 # For details see man 4 crontabs
 
 # Example of job definition:

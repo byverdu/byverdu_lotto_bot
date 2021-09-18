@@ -5,6 +5,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
+    "postinstall": "chmod +x cron_setup.sh && ./cron_setup.sh",
     "dev": "DEBUG=node-telegram-bot-api HEADLESS_CHROME=false nodemon index.js",
     "start": "DEBUG=node-telegram-bot-api HEADLESS_CHROME=true node index.js"
   },
