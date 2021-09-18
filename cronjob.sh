@@ -1,6 +1,7 @@
-#!/bin/zsh
+#!/bin/bash
 
 # set cronjobs crontab -e
+# on mac M1 had to add PATH before the cronjob
 
 # For details see man 4 crontabs
 
