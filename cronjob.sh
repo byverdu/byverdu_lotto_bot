@@ -20,10 +20,10 @@
 # 0 9 * * wed,sat (cd $GLOBAL_PATH/byverdu_lotto_bot && ./cronjob.sh)
 
 # Add timestamp
-echo "start bot => $(date)" >> log.txt
-
+echo "start bot => $(date)" >>log.txt
+echo $(which npm) >>log.txt
 # Run Telegram bot
 yarn start
 
 # Add timestamp
-echo "end bot => $(date)" >> log.txt
+echo "end bot => $(date)" >>log.txt
